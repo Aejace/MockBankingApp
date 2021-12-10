@@ -4,12 +4,6 @@
 
 namespace Bank_Engine
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
     /// <summary>
     /// Manages users, bank accounts, and transactions. Used to inform UI.
     /// </summary>
@@ -18,7 +12,7 @@ namespace Bank_Engine
         // Private variables to BankEngine
         // List of Admin
         // Dictionary of clients by Username.
-        // List of all accounts?
+        // List of all accounts by account name.
 
         /// <summary>
         /// Adds a user to the engine.
@@ -42,7 +36,8 @@ namespace Bank_Engine
             // Look through list of client names to find the one that matches
             // Get associated user
             // Create an account of type specified, either checking, savings, or loan
-            // Add account to user's list of accounts
+            // Add account ID to user's list of account ID's
+            // Add account to bank engine's list of accounts
         }
 
         /// <summary>
@@ -88,6 +83,7 @@ namespace Bank_Engine
         {
             // Constructor
             // Sets Associated User
+            // Generate and Sets account ID
         }
 
         /// <summary>
@@ -97,6 +93,7 @@ namespace Bank_Engine
         {
             // Constructor
             // Sets associated User
+            // Generate and Sets account ID
             // Sets interest rate
         }
 
@@ -105,11 +102,14 @@ namespace Bank_Engine
         /// </summary>
         private class Loan : Account
         {
+            // static int number of Loan accounts created
+            // int Number of payments made
+
             // Constructor
+            // Sets associated User
+            // Generate and Sets account ID
             // Set amount owed
             // Set interest rate
-
-            // int Number of payments made
         }
     }
 }

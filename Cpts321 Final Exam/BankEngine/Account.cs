@@ -17,9 +17,11 @@ namespace Bank_Engine
     internal abstract class Account
     {
         // Variables
-        // string AssociatedClientUserName
+        // string AssociatedClientUserName?
+        // string accountID
         // double balance
         // LinkedList of transactions indicating history
+        // Static int number of Accounts created
 
         // Withdraw function, Takes in an amount.
         // If funds are sufficient, create withdraw transaction, add it to list, update balance

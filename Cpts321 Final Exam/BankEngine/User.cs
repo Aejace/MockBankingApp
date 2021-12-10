@@ -16,7 +16,7 @@ namespace Bank_Engine
     internal abstract class User
     {
         // string userName
-        // List of accessible accounts
+        // List of accessible accounts by account number
         // Bool isAdmin?
     }
 }
