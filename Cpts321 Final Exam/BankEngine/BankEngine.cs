@@ -14,7 +14,10 @@ namespace Bank_Engine
     /// </summary>
     public class BankEngine
     {
-        // Private variables to BankEngine
+        /// <summary>
+        /// The user currently logged in. May be a client or an administrator.
+        /// </summary>
+        public string CurrentUser;
 
         /// <summary>
         /// A dictionary containing all administrators, accessible by name.
@@ -27,14 +30,9 @@ namespace Bank_Engine
         private Dictionary<string, Client> clients = new Dictionary<string, Client>();
 
         /// <summary>
-        /// Dictionary of all accounts by account name.
+        /// Dictionary of all accounts by accountID.
         /// </summary>
         private Dictionary<string, Account> accounts = new Dictionary<string, Account>();
-
-        /// <summary>
-        /// The user currently logged in. May be a client or an administrator.
-        /// </summary>
-        private string currentUser;
 
         /// <summary>
         /// Boolean reflecting whether or not the current user is an administrator.
@@ -47,7 +45,7 @@ namespace Bank_Engine
         /// <param name="userName"> The userName of the new desired User. </param>
         /// <param name="password"> The password of that user. </param>
         /// <returns> A boolean representing whether or not the update was successful. </returns>
-        public bool changeUser(string userName, string password)
+        public bool ChangeUser(string userName, string password)
         {
             var checker = new UserNameAndPasswordChecker();
             if (!checker.Authenticate(userName, password))
@@ -55,7 +53,7 @@ namespace Bank_Engine
                 return false;
             }
 
-            this.currentUser = userName;
+            this.CurrentUser = userName;
             this.CheckAndUpdateCurrentUserAdminStatus(userName);
             return true;
         }
@@ -89,6 +87,20 @@ namespace Bank_Engine
             // Add account to bank engine's list of accounts
             string accountID = "";
             return accountID;
+        }
+
+        /// <summary>
+        /// Gets account IDs the current user has access to.
+        /// </summary>
+        /// <returns> The account IDs associated with the current user. </returns>
+        public List<string> GetAccountIDsAvailableToUser()
+        {
+            // If user is admin
+            // return all accounts
+            // If user is client
+            // return client accounts
+            var availableAccountIDs = new List<string>();
+            return availableAccountIDs;
         }
 
         /// <summary>
