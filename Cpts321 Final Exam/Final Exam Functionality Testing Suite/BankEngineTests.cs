@@ -55,14 +55,51 @@ namespace Final_Exam_Functionality_Testing_Suite
             bankEngine.AccountTransaction("C00", "L20", 45000.00); // NotARobot pays off loan
         }
 
+        /// <summary>
+        /// Tests to see if BankEngine can add an administrator.
+        /// </summary>
         [Test]
-        public void Test1()
+        public void AddAdministrator()
         {
             var bankEngine = new BankEngine();
-            bankEngine.AddUser("GiovanniMedici", "Administrator"); // Add an administrator
-            bankEngine.changeUser("GiovanniMedici", "MakeHasteSlowly"); // Login to user
 
-            //Assert.AreEqual(bankEngine.administrators"GiovanniMedici");
+            // If adding an administrator is successful
+            if (bankEngine.AddUser("GiovanniMedici", "Administrator"))
+            {
+                Assert.Pass();
+            }
+
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Tests to see if BankEngine can add an administrator.
+        /// </summary>
+        [Test]
+        public void AddClients()
+        {
+            var bankEngine = new BankEngine();
+
+            // If adding an administrator is successful
+            if (bankEngine.AddUser("GiovanniMedici", "Administrator"))
+            {
+                Assert.Pass();
+            }
+
+            Assert.Fail();
+        }
+
+        [Test]
+        public void AddClient()
+        {
+            var bankEngine = new BankEngine();
+        }
+
+        [Test]
+        public void ChangeCurrentUser()
+        {
+            var bankEngine = new BankEngine();
+            bankEngine.changeUser("GiovanniMedici", "MakeHasteSlowly"); // Login to user
         }
     }
 }

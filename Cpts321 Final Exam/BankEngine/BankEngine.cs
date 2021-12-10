@@ -41,24 +41,6 @@ namespace Bank_Engine
         /// </summary>
         private bool currentUserIsAdmin = true;
 
-        // Function to check if current user is admin, and toggle is admin if that's the case.
-        // Iterate through list.
-
-        /// <summary>
-        /// Checks if the current user is an administrator, and toggle currentUserIsAdmin if that's the case.
-        /// </summary>
-        /// <param name="userName"> The user name of the current user. </param>
-        private void CheckAndUpdateCurrentUserAdminStatus(string userName)
-        {
-            if (this.administrators.All(admin => admin.Key != userName))
-            {
-                this.currentUserIsAdmin = false;
-                return;
-            }
-
-            this.currentUserIsAdmin = true;
-        }
-
         /// <summary>
         /// Changes out the current user to a new one.
         /// </summary>
@@ -83,11 +65,13 @@ namespace Bank_Engine
         /// </summary>
         /// <param name="userName"> The desired userName for the new user. </param>
         /// <param name="userType"> Indicates whether the user is an admin or a client. </param>
-        public void AddUser(string userName, string userType)
+        /// <returns> A boolean indicating if the addition was successful. Will fail if username is already taken.</returns>
+        public bool AddUser(string userName, string userType)
         {
             // If current user is an Admin and user name is not already taken,
             // Create user of specified type, either Admin or Client
             // Add to their respective lists.
+            return true;
         }
 
         /// <summary>
@@ -95,13 +79,16 @@ namespace Bank_Engine
         /// </summary>
         /// <param name="userName"> The name of the user the account will belong to. </param>
         /// <param name="accountType"> The type of account to be created, either checking, savings, or loan. </param>
-        public void AddAccount(string userName, string accountType)
+        /// <returns> The accountID of the account created. </returns>
+        public string AddAccount(string userName, string accountType)
         {
             // Look through list of client names to find the one that matches
             // Get associated user
             // Create an account of type specified, either checking, savings, or loan
             // Add account ID to user's list of account ID's
             // Add account to bank engine's list of accounts
+            string accountID = "";
+            return accountID;
         }
 
         /// <summary>
@@ -124,6 +111,21 @@ namespace Bank_Engine
             // if account2 is a valid account ID (and not the same as account1)
             // subtract amount from account1, add amount to account2.
             return true;
+        }
+
+        /// <summary>
+        /// Checks if the current user is an administrator, and toggle currentUserIsAdmin if that's the case.
+        /// </summary>
+        /// <param name="userName"> The user name of the current user. </param>
+        private void CheckAndUpdateCurrentUserAdminStatus(string userName)
+        {
+            if (this.administrators.All(admin => admin.Key != userName))
+            {
+                this.currentUserIsAdmin = false;
+                return;
+            }
+
+            this.currentUserIsAdmin = true;
         }
 
         /// <summary>
