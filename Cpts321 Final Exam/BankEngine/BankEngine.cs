@@ -2,6 +2,11 @@
 // Copyright (c) { Aejace studios }. All rights reserved.
 // </copyright>
 
+using Authenticator;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization.Formatters;
+
 namespace Bank_Engine
 {
     /// <summary>
@@ -10,9 +15,68 @@ namespace Bank_Engine
     public class BankEngine
     {
         // Private variables to BankEngine
-        // List of Admin
-        // Dictionary of clients by Username.
-        // List of all accounts by account name.
+
+        /// <summary>
+        /// A dictionary containing all administrators, accessible by name.
+        /// </summary>
+        private Dictionary<string, Administrator> administrators = new Dictionary<string, Administrator>();
+
+        /// <summary>
+        /// A dictionary of all clients, accessible by name.
+        /// </summary>
+        private Dictionary<string, Client> clients = new Dictionary<string, Client>();
+
+        /// <summary>
+        /// Dictionary of all accounts by account name.
+        /// </summary>
+        private Dictionary<string, Account> accounts = new Dictionary<string, Account>();
+
+        /// <summary>
+        /// The user currently logged in. May be a client or an administrator.
+        /// </summary>
+        private string currentUser;
+
+        /// <summary>
+        /// Boolean reflecting whether or not the current user is an administrator.
+        /// </summary>
+        private bool currentUserIsAdmin = true;
+
+        // Function to check if current user is admin, and toggle is admin if that's the case.
+        // Iterate through list.
+
+        /// <summary>
+        /// Checks if the current user is an administrator, and toggle currentUserIsAdmin if that's the case.
+        /// </summary>
+        /// <param name="userName"> The user name of the current user. </param>
+        private void CheckAndUpdateCurrentUserAdminStatus(string userName)
+        {
+            if (this.administrators.All(admin => admin.Key != userName))
+            {
+                this.currentUserIsAdmin = false;
+                return;
+            }
+
+            this.currentUserIsAdmin = true;
+        }
+
+        /// <summary>
+        /// Changes out the current user to a new one.
+        /// </summary>
+        /// <param name="userName"> The userName of the new desired User. </param>
+        /// <param name="password"> The password of that user. </param>
+        /// <returns> A boolean representing whether or not the update was successful. </returns>
+        public bool changeUser(string userName, string password)
+        {
+            var checker = new UserNameAndPasswordChecker();
+            if (!checker.Authenticate(userName, password))
+            {
+                return false;
+            }
+
+            this.currentUser = userName;
+            this.CheckAndUpdateCurrentUserAdminStatus(userName);
+            return true;
+        }
 
         /// <summary>
         /// Adds a user to the engine.
@@ -21,7 +85,7 @@ namespace Bank_Engine
         /// <param name="userType"> Indicates whether the user is an admin or a client. </param>
         public void AddUser(string userName, string userType)
         {
-            // Check that user name is not already taken
+            // If current user is an Admin and user name is not already taken,
             // Create user of specified type, either Admin or Client
             // Add to their respective lists.
         }
@@ -57,7 +121,7 @@ namespace Bank_Engine
             // if account2 is "Deposit"
             // add amount to first account (using account.deposit)
 
-            // if account2 is a valid account number (and not the same as account1)
+            // if account2 is a valid account ID (and not the same as account1)
             // subtract amount from account1, add amount to account2.
             return true;
         }
@@ -67,6 +131,7 @@ namespace Bank_Engine
         /// </summary>
         private class Client : User
         {
+            // Clients have access to their own accounts.
         }
 
         /// <summary>
@@ -74,6 +139,8 @@ namespace Bank_Engine
         /// </summary>
         private class Administrator : User
         {
+            // Admin have access to all accounts
+            // Admin can run add user and add account, But that wont be implemented because it's beyond the scope of the project in terms of UI.
         }
 
         /// <summary>
