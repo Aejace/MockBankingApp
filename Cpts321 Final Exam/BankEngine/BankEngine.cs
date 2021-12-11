@@ -122,8 +122,52 @@ namespace Bank_Engine
             // Create an account of type specified, either checking, savings, or loan
             // Add account ID to user's list of account ID's
             // Add account to bank engine's list of accounts
-            string accountID = "";
-            return accountID;
+
+            // If current user is an Admin
+            if (!this.currentUserIsAdmin)
+            {
+                return "Unauthorized access";
+            }
+
+            var currentClient = this.clients[userName];
+            if (currentClient == null)
+            {
+                return "Unrecognized User Name";
+            }
+
+            var newAccountID = "Error";
+
+            switch (accountType)
+            {
+                case "Checking":
+                {
+                    var newChecking = new Checking(userName);
+                    newAccountID = newChecking.accountID;
+                    currentClient.accessibleAccountIDs.Add(newAccountID);
+                    this.accounts.Add(newAccountID, newChecking);
+                    break;
+                }
+
+                case "Saving":
+                {
+                    var newSaving = new Saving(userName, 0.005);
+                    newAccountID = newSaving.accountID;
+                    currentClient.accessibleAccountIDs.Add(newAccountID);
+                    this.accounts.Add(newAccountID, newSaving);
+                    break;
+                }
+
+                case "Loan":
+                {
+                    var newLoan = new Loan(userName, 0.005, 5000.00);
+                    newAccountID = newLoan.accountID;
+                    currentClient.accessibleAccountIDs.Add(newAccountID);
+                    this.accounts.Add(newAccountID, newLoan);
+                    break;
+                }
+            }
+
+            return newAccountID;
         }
 
         /// <summary>
