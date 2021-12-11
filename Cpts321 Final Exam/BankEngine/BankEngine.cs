@@ -35,6 +35,11 @@ namespace Bank_Engine
         private Dictionary<string, Account> accounts = new Dictionary<string, Account>();
 
         /// <summary>
+        /// List of all accountIDs.
+        /// </summary>
+        private List<string> allAccounts = new List<string>();
+
+        /// <summary>
         /// Boolean reflecting whether or not the current user is an administrator.
         /// </summary>
         private bool currentUserIsAdmin = true;
@@ -89,7 +94,7 @@ namespace Bank_Engine
             {
                 case "Administrator":
                 {
-                    var newAdmin = new Administrator(userName);
+                    var newAdmin = new Administrator(userName, this.allAccounts);
                     this.administrators.Add(userName, newAdmin);
                     return true;
                 }
@@ -125,13 +130,12 @@ namespace Bank_Engine
         /// <summary>
         /// Gets account IDs the current user has access to.
         /// </summary>
+        /// <param name="userName">  </param>
         /// <returns> The account IDs associated with the current user. </returns>
-        public List<string> GetAccountIDsAvailableToUser()
+        public List<string> GetAccountIDsAvailableToUser(string userName)
         {
-            // If user is admin
-            // return all accounts
-            // If user is client
-            // return client accounts
+            // Get user
+            // return their internal list
             var availableAccountIDs = new List<string>();
             return availableAccountIDs;
         }
@@ -178,7 +182,14 @@ namespace Bank_Engine
         /// </summary>
         private class Client : User
         {
-            // Clients have access to their own accounts.
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Client"/> class.
+            /// </summary>
+            /// <param name="userName"> The userName associated with the account. </param>
+            internal Client(string userName)
+            {
+                this.userName = userName;
+            }
         }
 
         /// <summary>
@@ -188,6 +199,17 @@ namespace Bank_Engine
         {
             // Admin have access to all accounts
             // Admin can run add user and add account, But that wont be implemented because it's beyond the scope of the project in terms of UI.
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Administrator"/> class.
+            /// </summary>
+            /// <param name="userName"> The userName associated with the account. </param>
+            /// <param name="allAccountIDs"> List of all accountIDs. </param>
+            internal Administrator(string userName, List<string> allAccountIDs)
+            {
+                this.userName = userName;
+                this.accessibleAccountIDs = allAccountIDs;
+            }
         }
 
         /// <summary>
