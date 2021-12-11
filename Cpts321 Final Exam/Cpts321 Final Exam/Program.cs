@@ -107,6 +107,7 @@ namespace Cpts321_Final_Exam
                 Console.WriteLine("[0] Quit");
                 Console.WriteLine("[1] Change User");
                 Console.WriteLine("[2] Check Status of Accounts");
+                Console.WriteLine("[3] Make Transaction");
             }
 
             void DisplayAccounts()
@@ -121,7 +122,7 @@ namespace Cpts321_Final_Exam
 
             void DisplayTransactionDialouge()
             {
-
+                Console.WriteLine("Unimplimented");
             }
         }
     }
