@@ -4,11 +4,8 @@
 
 namespace Bank_Engine
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// A clients bank account. May be a checking, savings, or loan account.
@@ -19,7 +16,7 @@ namespace Bank_Engine
         /// <summary>
         /// An ongoing count of the total number of accounts that have been instantiated.
         /// </summary>
-        internal static int numberOfAccountsCreated;
+        internal static int numberOfAccountsCreated = 0;
 
         /// <summary>
         /// Contains a record of transactions on the account. retains up to 10 transactions.
@@ -42,6 +39,16 @@ namespace Bank_Engine
         internal double balance = 0.00;
 
         /// <summary>
+        /// Total number of deposits made.
+        /// </summary>
+        internal int depositsMade = 0;
+
+        /// <summary>
+        /// Total number of withdraws made.
+        /// </summary>
+        internal int withdrawsMade = 0;
+
+        /// <summary>
         /// Withdraws specified amount of money from the account.
         /// </summary>
         /// <param name="amount"> The amount of money to be withdrawn from the account. </param>
@@ -61,6 +68,7 @@ namespace Bank_Engine
 
             this.transactionHistory.Enqueue(new Transaction(amount, "Withdraw")); // Create transaction and add to history
             this.balance -= amount; // Update balance.
+            ++this.withdrawsMade;
             return true;
         }
 
@@ -79,6 +87,7 @@ namespace Bank_Engine
 
             this.transactionHistory.Enqueue(new Transaction(amount, "Deposit")); // Create transaction and add to history
             this.balance += amount; // Update balance.
+            ++this.depositsMade;
             return true;
         }
 
@@ -102,12 +111,12 @@ namespace Bank_Engine
             /// <summary>
             /// The amount of money involved in a transaction.
             /// </summary>
-            private readonly double amount;
+            internal readonly double amount;
 
             /// <summary>
             /// The transaction type, either withdraw or deposit.
             /// </summary>
-            private readonly string transactionType;
+            internal readonly string transactionType;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="Transaction"/> class.

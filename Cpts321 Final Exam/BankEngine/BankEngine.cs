@@ -2,13 +2,13 @@
 // Copyright (c) { Aejace studios }. All rights reserved.
 // </copyright>
 
-using Authenticator;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization.Formatters;
-
 namespace Bank_Engine
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using Authenticator;
+    using Interest_Calculator;
+
     /// <summary>
     /// Manages users, bank accounts, and transactions. Used to inform UI.
     /// </summary>
@@ -22,22 +22,22 @@ namespace Bank_Engine
         /// <summary>
         /// A dictionary containing all administrators, accessible by name.
         /// </summary>
-        private Dictionary<string, Administrator> administrators = new Dictionary<string, Administrator>();
+        private readonly Dictionary<string, Administrator> administrators = new Dictionary<string, Administrator>();
 
         /// <summary>
         /// A dictionary of all clients, accessible by name.
         /// </summary>
-        private Dictionary<string, Client> clients = new Dictionary<string, Client>();
+        private readonly Dictionary<string, Client> clients = new Dictionary<string, Client>();
 
         /// <summary>
         /// Dictionary of all accounts by accountID.
         /// </summary>
-        private Dictionary<string, Account> accounts = new Dictionary<string, Account>();
+        private readonly Dictionary<string, Account> accounts = new Dictionary<string, Account>();
 
         /// <summary>
         /// List of all accountIDs.
         /// </summary>
-        private List<string> allAccounts = new List<string>();
+        private readonly List<string> allAccounts = new List<string>();
 
         /// <summary>
         /// Boolean reflecting whether or not the current user is an administrator.
@@ -72,14 +72,12 @@ namespace Bank_Engine
         public bool AddUser(string userName, string userType)
         {
             // If current user is an Admin and user name is not already taken,
-            // Create user of specified type, either Admin or Client
-            // Add to their respective lists.
-
             if (!this.currentUserIsAdmin)
             {
                 return false;
             }
 
+            // and user name is not already taken
             if (this.administrators.Any(admin => admin.Key == userName))
             {
                 return false;
@@ -90,21 +88,22 @@ namespace Bank_Engine
                 return false;
             }
 
+            // Create user of specified type, either Admin or Client and add it to their respective lists.
             switch (userType)
             {
                 case "Administrator":
-                {
-                    var newAdmin = new Administrator(userName, this.allAccounts);
-                    this.administrators.Add(userName, newAdmin);
-                    return true;
-                }
+                    {
+                        var newAdmin = new Administrator(userName, this.allAccounts);
+                        this.administrators.Add(userName, newAdmin);
+                        return true;
+                    }
 
                 case "Client":
-                {
-                    var newClient = new Client(userName);
-                    this.clients.Add(userName, newClient);
-                    return true;
-                }
+                    {
+                        var newClient = new Client(userName);
+                        this.clients.Add(userName, newClient);
+                        return true;
+                    }
             }
 
             return false;
@@ -128,9 +127,9 @@ namespace Bank_Engine
         }
 
         /// <summary>
-        /// Gets account IDs the current user has access to.
+        /// Gets account IDs indicated user has access to.
         /// </summary>
-        /// <param name="userName">  </param>
+        /// <param name="userName"> Name of user. </param>
         /// <returns> The account IDs associated with the current user. </returns>
         public List<string> GetAccountIDsAvailableToUser(string userName)
         {
@@ -217,20 +216,92 @@ namespace Bank_Engine
         /// </summary>
         private class Checking : Account
         {
-            // Constructor
-            // Sets Associated User
-            // Generate and Sets account ID
+            /// <summary>
+            /// Total number of checking accounts that have been created.
+            /// </summary>
+            private static int numberOfCheckingAccountsCreated = 0;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Checking"/> class.
+            /// </summary>
+            /// <param name="userName"> The name of the user associated with the account. </param>
+            internal Checking(string userName)
+            {
+                this.associatedClientUserName = userName;
+                ++numberOfAccountsCreated;
+                ++numberOfCheckingAccountsCreated;
+                this.accountID = "C" + numberOfAccountsCreated.ToString() + numberOfCheckingAccountsCreated.ToString();
+            }
+
+            /// <summary>
+            /// Prints account information.
+            /// </summary>
+            /// <returns> Returns a string containing information about the account. </returns>
+            public string PrintAccount()
+            {
+                var toPrint = "Account ID: " + this.accountID + "\n Current Balance: " + this.balance + "\n Transaction History: ";
+                var history = this.PrintHistory();
+                return history.Aggregate(toPrint, (current, transaction) => current + transaction + "\n");
+            }
         }
 
         /// <summary>
         /// A savings bank account. Has an interest rate that rewards the client for storing money in the account.
         /// </summary>
-        private class Savings : Account
+        private class Saving : Account
         {
-            // Constructor
-            // Sets associated User
-            // Generate and Sets account ID
-            // Sets interest rate
+            /// <summary>
+            /// Total number of Saving accounts that have been created.
+            /// </summary>
+            private static int numberOfSavingAccountsCreated = 0;
+
+            /// <summary>
+            /// Interest rate for the account.
+            /// </summary>
+            private readonly double interestRate = 0.005;
+
+            /// <summary>
+            /// Total interest gained so far through the year.
+            /// </summary>
+            private double interestAccruedThisYear = 0.00;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Saving"/> class.
+            /// </summary>
+            /// <param name="userName"> The name of the user associated with the account. </param>
+            /// <param name="interest"> Interest rate of the account. </param>
+            internal Saving(string userName, double interest)
+            {
+                this.associatedClientUserName = userName;
+                this.interestRate = interest;
+                ++numberOfAccountsCreated;
+                ++numberOfSavingAccountsCreated;
+                this.accountID = "S" + numberOfAccountsCreated + numberOfSavingAccountsCreated;
+            }
+
+            public void addInterestForMonthToAccount()
+            {
+                var calculator = new InterestCalculator();
+                var interestEarned = calculator.GetInterest(this.balance, this.interestRate);
+                this.Deposit(interestEarned);
+                this.interestAccruedThisYear += interestEarned;
+            }
+
+            /// <summary>
+            /// Prints account information.
+            /// </summary>
+            /// <returns> Returns a string containing information about the account. </returns>
+            public string PrintAccount()
+            {
+                var toPrint = "Account ID: " + this.accountID
+                                             + "\n Current Balance: " + this.balance
+                                             + "\n Interest Rate: " + this.interestRate
+                                             + "\n Interest Accrued This Year: " + this.interestAccruedThisYear
+                                             + "\n Transaction History: ";
+
+                var history = this.PrintHistory();
+                return history.Aggregate(toPrint, (current, transaction) => current + transaction + "\n");
+            }
         }
 
         /// <summary>
@@ -238,14 +309,79 @@ namespace Bank_Engine
         /// </summary>
         private class Loan : Account
         {
-            // static int number of Loan accounts created
-            // int Number of payments made
+            /// <summary>
+            /// Total number of Loan accounts that have been created.
+            /// </summary>
+            private static int numberOfLoanAccountsCreated = 0;
 
-            // Constructor
-            // Sets associated User
-            // Generate and Sets account ID
-            // Set amount owed
-            // Set interest rate
+            /// <summary>
+            /// Interest rate for the account.
+            /// </summary>
+            private readonly double interestRate = 0.025;
+
+            /// <summary>
+            /// Total amount of the loan taken out.
+            /// </summary>
+            private readonly double totalAmount = 0.00;
+
+            /// <summary>
+            /// Interest owed each month.
+            /// </summary>
+            private double paymentAmount = 0.00;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Loan"/> class.
+            /// </summary>
+            /// <param name="userName"> The name of the user associated with the account. </param>
+            /// <param name="interest"> Interest rate of the account. </param>
+            /// <param name="amount"> Amount of money loaned to client by the bank. </param>
+            internal Loan(string userName, double interest, double amount)
+            {
+                this.associatedClientUserName = userName;
+                this.interestRate = interest;
+                this.totalAmount = amount;
+                ++numberOfAccountsCreated;
+                ++numberOfLoanAccountsCreated;
+                this.accountID = "L" + numberOfAccountsCreated + numberOfLoanAccountsCreated;
+                this.GetMonthlyInterestPaymentAmount();
+                this.Withdraw(amount);
+            }
+
+            /// <summary>
+            /// Prints account information.
+            /// </summary>
+            /// <returns> Returns a string containing information about the account. </returns>
+            public string PrintAccount()
+            {
+                var toPrint = "Account ID: " + this.accountID
+                                             + "\n Loan Amount : " + this.totalAmount
+                                             + "\n Current Balance: " + this.balance
+                                             + "\n Interest Rate: " + this.interestRate
+                                             + "\n Transaction History: ";
+
+                var history = new List<string>();
+                foreach (var transaction in this.transactionHistory)
+                {
+                    var interestPaid = 0.00;
+                    interestPaid = transaction.amount > this.paymentAmount ? this.paymentAmount : transaction.amount;
+
+                    var transactionPrint = transaction.transactionType
+                        + "\n Interest paid: " + interestPaid
+                        + "\n Principal paid: " + (transaction.amount - interestPaid);
+                    history.Add(transactionPrint);
+                }
+
+                return history.Aggregate(toPrint, (current, transaction) => current + transaction + "\n");
+            }
+
+            /// <summary>
+            /// Calculates monthly payment amount.
+            /// </summary>
+            private void GetMonthlyInterestPaymentAmount()
+            {
+                var calculator = new InterestCalculator();
+                this.paymentAmount = calculator.GetPaymentAmount(this.depositsMade, this.interestRate);
+            }
         }
     }
 }

@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Authenticator\Authenticator.csproj" />
+    <ProjectReference Include="..\Interest Calculator\Interest Calculator.csproj" />
   </ItemGroup>
 
 </Project>
