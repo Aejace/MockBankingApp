@@ -69,7 +69,40 @@ namespace Bank_Engine
             // If current user is an Admin and user name is not already taken,
             // Create user of specified type, either Admin or Client
             // Add to their respective lists.
-            return true;
+
+            if (!this.currentUserIsAdmin)
+            {
+                return false;
+            }
+
+            if (this.administrators.Any(admin => admin.Key == userName))
+            {
+                return false;
+            }
+
+            if (this.clients.Any(client => client.Key == userName))
+            {
+                return false;
+            }
+
+            switch (userType)
+            {
+                case "Administrator":
+                {
+                    var newAdmin = new Administrator(userName);
+                    this.administrators.Add(userName, newAdmin);
+                    return true;
+                }
+
+                case "Client":
+                {
+                    var newClient = new Client(userName);
+                    this.clients.Add(userName, newClient);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
