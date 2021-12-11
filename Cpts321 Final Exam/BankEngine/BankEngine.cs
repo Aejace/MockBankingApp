@@ -117,12 +117,6 @@ namespace Bank_Engine
         /// <returns> The accountID of the account created. </returns>
         public string AddAccount(string userName, string accountType)
         {
-            // Look through list of client names to find the one that matches
-            // Get associated user
-            // Create an account of type specified, either checking, savings, or loan
-            // Add account ID to user's list of account ID's
-            // Add account to bank engine's list of accounts
-
             // If current user is an Admin
             if (!this.currentUserIsAdmin)
             {
@@ -145,6 +139,7 @@ namespace Bank_Engine
                     newAccountID = newChecking.accountID;
                     currentClient.accessibleAccountIDs.Add(newAccountID);
                     this.accounts.Add(newAccountID, newChecking);
+                    this.allAccounts.Add(newAccountID);
                     break;
                 }
 
@@ -154,6 +149,7 @@ namespace Bank_Engine
                     newAccountID = newSaving.accountID;
                     currentClient.accessibleAccountIDs.Add(newAccountID);
                     this.accounts.Add(newAccountID, newSaving);
+                    this.allAccounts.Add(newAccountID);
                     break;
                 }
 
@@ -163,6 +159,7 @@ namespace Bank_Engine
                     newAccountID = newLoan.accountID;
                     currentClient.accessibleAccountIDs.Add(newAccountID);
                     this.accounts.Add(newAccountID, newLoan);
+                    this.allAccounts.Add(newAccountID);
                     break;
                 }
             }
@@ -171,16 +168,26 @@ namespace Bank_Engine
         }
 
         /// <summary>
-        /// Gets account IDs indicated user has access to.
+        /// Gets account IDs current user has access to.
         /// </summary>
-        /// <param name="userName"> Name of user. </param>
         /// <returns> The account IDs associated with the current user. </returns>
-        public List<string> GetAccountIDsAvailableToUser(string userName)
+        public List<string> GetAccountIDsAvailableToUser()
         {
-            // Get user
-            // return their internal list
-            var availableAccountIDs = new List<string>();
-            return availableAccountIDs;
+            if (this.currentUserIsAdmin)
+            {
+                return this.allAccounts;
+            }
+            else
+            {
+                var client = this.clients[this.CurrentUser];
+                return client.accessibleAccountIDs;
+            }
+        }
+
+        public string PrintAccountByID(string accountID)
+        {
+            var currentAccount = this.accounts[accountID];
+            return currentAccount.PrintAccount();
         }
 
         /// <summary>
@@ -193,16 +200,31 @@ namespace Bank_Engine
         public bool AccountTransaction(string account1, string account2, double amount)
         {
             // Get first account
+            var fromAccount = this.accounts[account1];
 
-            // If account2 is "Withdraw"
-            // subtract amount from first account (using account.withdraw)
+            switch (account2)
+            {
+                case "Withdraw":
+                    return fromAccount.Withdraw(amount);
 
-            // if account2 is "Deposit"
-            // add amount to first account (using account.deposit)
+                case "Deposit":
+                    return fromAccount.Deposit(amount);
+            }
 
-            // if account2 is a valid account ID (and not the same as account1)
-            // subtract amount from account1, add amount to account2.
+            if (!this.allAccounts.Contains(account2))
+            {
+                return false;
+            }
+
+            var toAccount = this.accounts[account2];
+            if (!fromAccount.Withdraw(amount))
+            {
+                return false;
+            }
+
+            toAccount.Deposit(amount);
             return true;
+
         }
 
         /// <summary>
@@ -281,7 +303,7 @@ namespace Bank_Engine
             /// Prints account information.
             /// </summary>
             /// <returns> Returns a string containing information about the account. </returns>
-            public string PrintAccount()
+            public override string PrintAccount()
             {
                 var toPrint = "Account ID: " + this.accountID + "\n Current Balance: " + this.balance + "\n Transaction History: ";
                 var history = this.PrintHistory();
@@ -323,7 +345,7 @@ namespace Bank_Engine
                 this.accountID = "S" + numberOfAccountsCreated + numberOfSavingAccountsCreated;
             }
 
-            public void addInterestForMonthToAccount()
+            public void AddInterestForMonthToAccount()
             {
                 var calculator = new InterestCalculator();
                 var interestEarned = calculator.GetInterest(this.balance, this.interestRate);
@@ -335,7 +357,7 @@ namespace Bank_Engine
             /// Prints account information.
             /// </summary>
             /// <returns> Returns a string containing information about the account. </returns>
-            public string PrintAccount()
+            public override string PrintAccount()
             {
                 var toPrint = "Account ID: " + this.accountID
                                              + "\n Current Balance: " + this.balance
@@ -395,7 +417,7 @@ namespace Bank_Engine
             /// Prints account information.
             /// </summary>
             /// <returns> Returns a string containing information about the account. </returns>
-            public string PrintAccount()
+            public override string PrintAccount()
             {
                 var toPrint = "Account ID: " + this.accountID
                                              + "\n Loan Amount : " + this.totalAmount

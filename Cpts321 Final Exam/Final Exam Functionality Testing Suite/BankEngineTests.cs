@@ -119,7 +119,7 @@ namespace Final_Exam_Functionality_Testing_Suite
             bankEngine.AddUser("NotARobot", "Client"); // Add a Client
 
             // Add checking account to user and see if the ID generated is what is expected.
-            Assert.AreEqual("S11", bankEngine.AddAccount("NotARobot", "Saving"));
+            Assert.AreEqual("S31", bankEngine.AddAccount("NotARobot", "Saving"));
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace Final_Exam_Functionality_Testing_Suite
             bankEngine.AddUser("NotARobot", "Client"); // Add a Client
 
             // Add checking account to user and see if the ID generated is what is expected.
-            Assert.AreEqual("L11", bankEngine.AddAccount("NotARobot", "Loan"));
+            Assert.AreEqual("L21", bankEngine.AddAccount("NotARobot", "Loan"));
         }
     }
 }

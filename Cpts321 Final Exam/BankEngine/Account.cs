@@ -104,6 +104,15 @@ namespace Bank_Engine
         }
 
         /// <summary>
+        /// Print account, to be overwritten by concrete classes.
+        /// </summary>
+        /// <returns> A string containing account information. </returns>
+        public virtual string PrintAccount()
+        {
+            return "Empty Account";
+        }
+
+        /// <summary>
         /// Object that encapsulates the information of a transaction, used to record history of transactions.
         /// </summary>
         internal class Transaction
