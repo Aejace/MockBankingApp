@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31919.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cpts321 Final Exam", "Cpts321 Final Exam\Cpts321 Final Exam.csproj", "{471DF49E-36FF-4596-993D-3D808D821DEE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B01D07FA-1632-48D9-95EC-68E3C7A067BC} = {B01D07FA-1632-48D9-95EC-68E3C7A067BC}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bank Engine", "BankEngine\Bank Engine.csproj", "{B01D07FA-1632-48D9-95EC-68E3C7A067BC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DE68EC29-5B9D-494D-A2D9-3B7FCF322081} = {DE68EC29-5B9D-494D-A2D9-3B7FCF322081}
+		{C751FEF8-ABC3-470E-94C1-D0F38AEC8FB9} = {C751FEF8-ABC3-470E-94C1-D0F38AEC8FB9}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authenticator", "Authenticator\Authenticator.csproj", "{DE68EC29-5B9D-494D-A2D9-3B7FCF322081}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interest Calculator", "Interest Calculator\Interest Calculator.csproj", "{C751FEF8-ABC3-470E-94C1-D0F38AEC8FB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Final Exam Functionality Testing Suite", "Final Exam Functionality Testing Suite\Final Exam Functionality Testing Suite.csproj", "{57440AB5-2E82-40EF-9968-29EB5AF49B80}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DE68EC29-5B9D-494D-A2D9-3B7FCF322081} = {DE68EC29-5B9D-494D-A2D9-3B7FCF322081}
+		{C751FEF8-ABC3-470E-94C1-D0F38AEC8FB9} = {C751FEF8-ABC3-470E-94C1-D0F38AEC8FB9}
+		{B01D07FA-1632-48D9-95EC-68E3C7A067BC} = {B01D07FA-1632-48D9-95EC-68E3C7A067BC}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{471DF49E-36FF-4596-993D-3D808D821DEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{471DF49E-36FF-4596-993D-3D808D821DEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{471DF49E-36FF-4596-993D-3D808D821DEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{471DF49E-36FF-4596-993D-3D808D821DEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B01D07FA-1632-48D9-95EC-68E3C7A067BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B01D07FA-1632-48D9-95EC-68E3C7A067BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B01D07FA-1632-48D9-95EC-68E3C7A067BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B01D07FA-1632-48D9-95EC-68E3C7A067BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE68EC29-5B9D-494D-A2D9-3B7FCF322081}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE68EC29-5B9D-494D-A2D9-3B7FCF322081}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE68EC29-5B9D-494D-A2D9-3B7FCF322081}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE68EC29-5B9D-494D-A2D9-3B7FCF322081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C751FEF8-ABC3-470E-94C1-D0F38AEC8FB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C751FEF8-ABC3-470E-94C1-D0F38AEC8FB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C751FEF8-ABC3-470E-94C1-D0F38AEC8FB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C751FEF8-ABC3-470E-94C1-D0F38AEC8FB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57440AB5-2E82-40EF-9968-29EB5AF49B80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57440AB5-2E82-40EF-9968-29EB5AF49B80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57440AB5-2E82-40EF-9968-29EB5AF49B80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57440AB5-2E82-40EF-9968-29EB5AF49B80}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4633ABCD-13EA-43D1-ACF7-91C6923FEDBC}
+	EndGlobalSection
+EndGlobal
